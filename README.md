@@ -12,6 +12,7 @@ We plan to create a coursework/organization system that will increase productivi
 - Remove a task from your To-Do list
   ```
   todo delete task
+  ```
 - List all your tasks and due dates
   ```
   todo list
