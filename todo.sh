@@ -50,15 +50,40 @@ create_course()
 	
 }
 #delete course
-
+#arg 1 is the course
 delete_course()
 {
 	sed -i '' "/$1/d" "$HOME_DIR/courses.txt"
 	rm -r "$HOME_DIR/$1"
 	echo "$1 has been removed as a course"
 }
+
 # create assignment
+#first arg is course name
+#arg 2 is assignment name
+#arg 3 is assignment due date
+#creates a directory as assignment name and adds assignment name to assignments.txt
+#usage: assignment cis191 hw10 month/day/year
+create_assignment()
+{
+	if grep -q "$2" "$HOME_DIR/$1/assignments.txt"; then
+		echo "$2 is already an assignment in your $1 course"
+	else
+		due_date=$(date -d "$3")
+		echo "$2	$due_date" >> "$HOME_DIR/$1/assignments.txt"
+		mkdir "$HOME_DIR/$1/$2"
+		echo "$2 (due on $3) has been added as an assignment in course $1"
+	fi
+}
 # delete assignment
+#arg 1 is the course
+#arg 2 is the assignment
+delete_assignment()
+{
+	sed -i '' "/$2/d" "$HOME_DIR/$1/assignments.txt"
+	rm -r "$HOME_DIR/$1/$2"
+	echo "Assignment $2 has been removed from class $1's assignments"
+}
 # create exam
 # delete exam
 
@@ -87,26 +112,28 @@ delete_course()
 # 	# fi
 # }
 
-#takes in a task name
-#lets user know if task does not exist
-delete()
+#lists all the courses
+list_courses()
 {
-	#TODO: find line that task is on (should limit to only one line) and delete line
-	return 0
+	echo "Here are your current courses:"
+	cat "$HOME_DIR/courses.txt"
 }
 
-#lists all the tasks and their due dates
-list()
+#list all assignments
+#arg 1 is course
+#if no args, list all assignments
+list_assignments()
 {
-	echo "Here are your current tasks and their due dates:"
-	cat "$HOME_DIR/tasks.txt"
-}
+	if [[ "$#" -eq 1 ]]; then
 
-#updates a due date for an existing task
-#throw an error if that task does not exist
-update()
-{
-	return 0
+		echo "Here are your assignments for $1:"
+		cat "$HOME_DIR/$1/assignments.txt"
+	else
+		echo "Here are your assignments for all classes"
+		while read l; do
+			cat "$l/assignments.txt"
+		done <courses.txt
+	fi
 }
 
 initialize()
@@ -116,7 +143,8 @@ initialize()
 	fi
 }
 initialize
-create_course testing
 create_course class1
-delete_course testing
+create_assignment class1 testAssignment 05/06
+list_courses
+list_assignments
 # delete_course testing
