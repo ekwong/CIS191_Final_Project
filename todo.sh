@@ -25,37 +25,72 @@ main()
 		esac
 	done
 }
+#check if a line exists in txt file
+#takes in filename and line looking for
+check_exists()
+{
+	if grep -q "$1" "$2"; then
+		return 1
+	else
+		return 0
+	fi
+
+}
+#create class
+create_class()
+{
+	check_exists "$1" "$HOME_DIR/classes.txt" 
+	if grep -q "$HOME_DIR/classes.txt" "$1"; then
+		echo "This class already exists"
+		return 1
+	fi
+	echo "$1" > $"HOME_DIR/classes.txt"
+	mkdir "$HOME_DIR/$1"
+	echo "$1 has been added as a class"
+}
+#delete class
+
+# delete_class()
+# {
+# 	sed -i 's/$1//g' "$HOME_DIR/classes.txt"
+# 	rm -r "$HOME_DIR/$1"
+# }
+#create assignment
+#delete assignment
+#create exam
+#delete exam
 
 #takes in a single date in the form of: MM/DD/YYYY
-parse_date()
-{
-	return [[ "$1" =~ (0[0-9]|1[0-2])\/([0-2][0-9]|3[01])\/[0-9]{4} ]]
-}
+# parse_date()
+# {
+# 	return [[ "$1" =~ (0[0-9]|1[0-2])\/([0-2][0-9]|3[01])\/[0-9]{4} ]]
+# }
 
 #takes in a task and a due date
-add()
-{
-	#TODO: parse task and due date.
-	#add task to tasks.txt file along with due date
-	#if valid task name and due date then add to tasks.txt
+# add()
+# {
+# 	#TODO: parse task and due date.
+# 	#add task to tasks.txt file along with due date
+# 	#if valid task name and due date then add to tasks.txt
 
-	#check if task already exists
-	if [[ grep -q "$1" "$HOME_DIR/tasks.txt" ]]; then
-		if [[ parse_date "$2" ]]; then
-			cat "$1 \t $2" >> "$HOME_DIR/tasks.txt"
-		else
-			echo "Date is not in the correct format"
-		fi
-	else
-		echo "That task already exists in your list"
-	fi
-}
+# 	#check if task already exists
+# 	# if grep -q "$1" "$HOME_DIR/tasks.txt" then
+# 	# 	if [[ parse_date "$2" ]]; then
+# 	# 		cat "$1 \t $2" >> "$HOME_DIR/tasks.txt"
+# 	# 	else
+# 	# 		echo "Date is not in the correct format"
+# 	# 	fi
+# 	# else
+# 	# 	echo "That task already exists in your list"
+# 	# fi
+# }
 
 #takes in a task name
 #lets user know if task does not exist
 delete()
 {
 	#TODO: find line that task is on (should limit to only one line) and delete line
+	return 0
 }
 
 #lists all the tasks and their due dates
@@ -69,12 +104,15 @@ list()
 #throw an error if that task does not exist
 update()
 {
-
+	return 0
 }
 
 initialize()
 {
 	if [[ ! -f "./tasks.txt" ]]; then
-		touch "$HOME_DIR/tasks.txt"
+		touch "$HOME_DIR/classes.txt"
 	fi
 }
+initialize
+create_class testing
+# delete_class testing
