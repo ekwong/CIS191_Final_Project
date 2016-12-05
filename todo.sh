@@ -36,29 +36,31 @@ check_exists()
 	fi
 
 }
-#create class
-create_class()
+#create course
+create_course()
 {
-	check_exists "$1" "$HOME_DIR/classes.txt" 
-	if grep -q "$HOME_DIR/classes.txt" "$1"; then
-		echo "This class already exists"
-		return 1
+	if grep -q "$1" "$HOME_DIR/courses.txt"; then
+		echo "$1 already exists as a course"
+	else
+		echo "$1" >> "$HOME_DIR/courses.txt"
+		mkdir "$HOME_DIR/$1"
+		touch "$HOME_DIR/$1/assignments.txt"
+		echo "$1 has been added as a course"
 	fi
-	echo "$1" > $"HOME_DIR/classes.txt"
-	mkdir "$HOME_DIR/$1"
-	echo "$1 has been added as a class"
+	
 }
-#delete class
+#delete course
 
-# delete_class()
-# {
-# 	sed -i 's/$1//g' "$HOME_DIR/classes.txt"
-# 	rm -r "$HOME_DIR/$1"
-# }
-#create assignment
-#delete assignment
-#create exam
-#delete exam
+delete_course()
+{
+	sed -i '' "/$1/d" "$HOME_DIR/courses.txt"
+	rm -r "$HOME_DIR/$1"
+	echo "$1 has been removed as a course"
+}
+# create assignment
+# delete assignment
+# create exam
+# delete exam
 
 #takes in a single date in the form of: MM/DD/YYYY
 # parse_date()
@@ -109,10 +111,12 @@ update()
 
 initialize()
 {
-	if [[ ! -f "./tasks.txt" ]]; then
-		touch "$HOME_DIR/classes.txt"
+	if [[ ! -f "$HOME_DIR/courses.txt" ]]; then
+		touch "$HOME_DIR/courses.txt"
 	fi
 }
 initialize
-create_class testing
-# delete_class testing
+create_course testing
+create_course class1
+delete_course testing
+# delete_course testing
