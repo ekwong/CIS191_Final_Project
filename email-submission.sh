@@ -1,43 +1,17 @@
 #!/bin/sh
 
-
 case $1 in
-    init ) 
-        shift
-        while getopts ":c:" opt; do
-           case $opt in
-           c )  class=$OPTARG ;;
-           esac
-        done
-    
-        if [[ (-z "$class") ]] ; then
-            echo "class is required to create class directory"
-            exit
-        fi;
-        
-        mkdir -p "$class"
-        cd "$class"
-        mkdir -p Assignments
-        mkdir -p Notes
-        mkdir -p Administration
-        touch .init
-        echo "className $class" > .init 
-        echo "Initalized class folder for $class"
-    ;;
     add-email )
 
         shift
-        while getopts ":e:" opt; do
+        while getopts ":c:e:" opt; do
            case $opt in
+           c )  class=$OPTARG ;;
            e )  email=$OPTARG ;;
            esac
         done
-    
-        if [[ (-z "$email") ]] ; then
-            echo "email are required to add an email address"
-            exit
-        fi;
         
+        cd "$class"
         foundInitFile=false
         while [[ "$PWD" != "/" ]] ; do
 
@@ -50,7 +24,7 @@ case $1 in
         done
 
         if [[ "$foundInitFile" == "true" ]]; then
-            echo "emailAddress $email" >> .init
+            echo "emailAddress $email" > .init
         else
             echo "no class folder was found"
             exit
@@ -58,24 +32,22 @@ case $1 in
        
         echo "Email address has been updated";;
     submit )
+
         shift
-        while getopts ":e:c:" opt; do
+        while getopts ":a:c:" opt; do
            case $opt in
-           e )  email=$OPTARG ;;
+           a )  assignment=$OPTARG ;;
            c )  class=$OPTARG ;;
            f )  files="list"
            esac
         done
-    
-        if [[ (-z "$class") ]]  || [[ (-z "$email") ]] ; then
-            echo "class and email are required to add an email address"
-            exit
-        fi;
-
+      
+        cd "$class"
+       
         foundInitFile=false
         while [[ "$PWD" != "/" ]] ; do
 
-            
+            pwd
             if [[ -f ".init" ]]; then
                 foundInitFile=true
                 break
@@ -84,8 +56,9 @@ case $1 in
         done
 
         if [[ "$foundInitFile" == "true" ]]; then
-            while read p; do
-                echo $p
+            while read line; do
+               emailAddress=${line:13}
+          
             done < ".init"
         else
             echo "no class folder was found"
@@ -93,7 +66,16 @@ case $1 in
         fi
 
       
-        echo "shup email and class and files are set";;
+
+        cd "Assignments" 
+        cd "$assignment"
+        rm -f files.tar   
+        tar -cf files.tar "../$assignment"
+      
+        mutt -a files.tar -s "Test Email" -- < /dev/null  rahul.fakir@gmail.com 
+
+        rm -f files.tar
+        ;;
     * ) echo "Unknown command";;
 esac
 shift
