@@ -39,7 +39,7 @@ We created a coursework/organization system that will increase productivity when
 - Delete assignment for a class
 
   ```
-  cis191-final-project create-assignment -c cis191 -a hw8
+  cis191-final-project delete-assignment -c cis191 -a hw8
   ```
   
 - Add TA/Instructors email address
