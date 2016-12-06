@@ -76,7 +76,7 @@ case $1 in
         rm -f files.tar   
         tar -cf files.tar "../$assignment"
       
-        mutt -a files.tar -s "Test Email" -- < /dev/null  "$emailAddress"
+        echo "Please find my homework files attached!" | mutt -a files.tar -s "Homework files" -- < /dev/null  "$emailAddress"
         echo "Files have been submitted"
         rm -f files.tar
         ;;

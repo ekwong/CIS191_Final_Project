@@ -126,7 +126,8 @@ case $1 in
                 a )  assignment=$OPTARG ;;
                esac
             done
-            todo.sh delete_assignment "$class" "$assignment" ;;
+            source ../todo.sh
+            delete_assignment "$class" "$assignment" ;;
         list-classes)
             source ../todo.sh
             list_courses;;
