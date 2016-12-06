@@ -1,30 +1,6 @@
 #!/bin/bash
 HOME_DIR=$(pwd)
 
-main()
-{
-	for arg in "$@"
-	do
-		case $arg in
-			"add")
-				shift
-				add "$@"
-				;;
-			"delete")
-				shift
-				delete "$@"
-				;;
-			"list")
-				list
-				;;
-			"update")
-				shift
-				update "$@"
-				;;
-			*) ;;
-		esac
-	done
-}
 #check if a line exists in txt file
 #takes in filename and line looking for
 check_exists()
@@ -34,8 +10,28 @@ check_exists()
 	else
 		return 0
 	fi
-
 }
+
+#takes in 2 args
+#arg 1 is the assignment
+#arg 2 is the due date
+add_cron()
+{
+	month=$(date +%m -d "$1"-1day)
+	day=$(date +%d -d "$1"-1day)
+	hour=$(date +%H -d "$1"-1day)
+	min=$(date +%M -d "$1"-1day)
+
+	reminder="echo $2 is due on $1"
+
+	crontab -l > temp
+	echo "$min $hour $day $month * root $reminder" >> temp
+	echo "$min $hour $day $month * root $reminder"
+	crontab temp
+	rm temp
+	echo "reminder created for assignment $2"
+}
+
 #create course
 create_course()
 {
@@ -47,8 +43,8 @@ create_course()
 		touch "$HOME_DIR/$1/assignments.txt"
 		echo "$1 has been added as a course"
 	fi
-	
 }
+
 #delete course
 #arg 1 is the course
 delete_course()
@@ -73,8 +69,10 @@ create_assignment()
 		echo "$2	$due_date" >> "$HOME_DIR/$1/assignments.txt"
 		mkdir "$HOME_DIR/$1/$2"
 		echo "$2 (due on $3) has been added as an assignment in course $1"
+		add_cron $3 $2
 	fi
 }
+
 # delete assignment
 #arg 1 is the course
 #arg 2 is the assignment
@@ -83,34 +81,11 @@ delete_assignment()
 	sed -i '' "/$2/d" "$HOME_DIR/$1/assignments.txt"
 	rm -r "$HOME_DIR/$1/$2"
 	echo "Assignment $2 has been removed from class $1's assignments"
+	crontab -l > temp
+	sed -i "/assignment $2 for course $1 is due/d" temp
+	crontab temp
+	rm temp
 }
-# create exam
-# delete exam
-
-#takes in a single date in the form of: MM/DD/YYYY
-# parse_date()
-# {
-# 	return [[ "$1" =~ (0[0-9]|1[0-2])\/([0-2][0-9]|3[01])\/[0-9]{4} ]]
-# }
-
-#takes in a task and a due date
-# add()
-# {
-# 	#TODO: parse task and due date.
-# 	#add task to tasks.txt file along with due date
-# 	#if valid task name and due date then add to tasks.txt
-
-# 	#check if task already exists
-# 	# if grep -q "$1" "$HOME_DIR/tasks.txt" then
-# 	# 	if [[ parse_date "$2" ]]; then
-# 	# 		cat "$1 \t $2" >> "$HOME_DIR/tasks.txt"
-# 	# 	else
-# 	# 		echo "Date is not in the correct format"
-# 	# 	fi
-# 	# else
-# 	# 	echo "That task already exists in your list"
-# 	# fi
-# }
 
 #lists all the courses
 list_courses()
@@ -132,8 +107,16 @@ list_assignments()
 		echo "Here are your assignments for all classes"
 		while read l; do
 			cat "$l/assignments.txt"
-		done <courses.txt
+		done <$HOME_DIR/courses.txt
 	fi
+}
+
+
+#arg 1 is course
+#arg 2 is assignment
+list_assignment_contents()
+{
+	ls "$HOME_DIR/$1/$2"
 }
 
 initialize()
@@ -144,7 +127,7 @@ initialize()
 }
 initialize
 create_course class1
-create_assignment class1 testAssignment 05/06
-list_courses
-list_assignments
+create_assignment class1 testAssignment 05/06/16
+# list_courses
+# list_assignments
 # delete_course testing
