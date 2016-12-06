@@ -1,20 +1,9 @@
 #!/bin/bash
 HOME_DIR=$(pwd)
 
-# check if a line exists in txt file
-# takes in filename and line looking for
-check_exists()
-{
-	if grep -q "$1" "$2"; then
-		return 1
-	else
-		return 0
-	fi
-}
-
 # takes in 2 args
-# arg 1 is the assignment
-# arg 2 is the due date
+# arg 1 is the due date
+# arg 2 is the assignment
 # arg 3 is the course
 # add_cron hw10 12/06/16 cis191
 add_cron()
@@ -28,10 +17,11 @@ add_cron()
 
 	crontab -l > temp
 	echo "$min $hour $day $month * root $reminder" >> temp
+	echo "The following cron job has been added: "
 	echo "$min $hour $day $month * root $reminder"
 	crontab temp
 	rm temp
-	echo "reminder created for assignment $2"
+	echo "Reminder created for assignment $2"
 }
 
 # create course
@@ -59,7 +49,7 @@ create_course()
 # deletes the course from .courses but does not delete actual course files themselves
 delete_course()
 {
-	sed -i '' "/$1/d" "$HOME_DIR/.courses"
+	sed -i "/$1/d" "$HOME_DIR/.courses"
 	echo "$1 has been removed as a course"
 }
 
@@ -104,7 +94,7 @@ update_assignment_date()
 	rm temp
 
 	# add new due date to crontab reminder
-	add_cron $2 $3 $1
+	add_cron $3 $2 $1
 }
 
 # delete assignment
@@ -135,13 +125,15 @@ list_assignments()
 {
 	if [[ "$#" -eq 1 ]]; then
 
-		echo "Here are your assignments for $1:"
+		echo "Here are your assignments and their due dates for $1:"
 		cat "$HOME_DIR/$1/assignments/.assignments_info"
 	else
-		echo "Here are your assignments for all classes"
+		echo "Here are your assignments and due dates for all classes"
 		while read l; do
-			cat "$l/.assignments_info"
-		done <$HOME_DIR/.courses
+			echo "Course $l has assignments:"
+			cat "$l/assignments/.assignments_info"
+			echo ""
+		done <"$HOME_DIR/.courses"
 	fi
 }
 
@@ -150,6 +142,7 @@ list_assignments()
 # arg 2 is assignment
 list_files_for_assignment()
 {
+	echo "Here are your files for course $1's assignment $2:"
 	ls "$HOME_DIR/$1/assignments/$2"
 }
 
@@ -160,13 +153,29 @@ initialize()
 	fi
 }
 initialize
-create_course class1
-create_assignment class1 testAssignment1 05/20/16
-echo "crontab is"
-crontab -l
-delete_assignment class1 testAssignment1
-echo "crontab after delete is"
-crontab -l
+# create_course class1
+# create_course class2
+# create_assignment class2 hw1 12/16/16
+# create_assignment class1 testAssignment1 05/20/16
+# create_assignment class1 hw2 12/15/16
+# create_course class3
+# list_courses
+# list_assignments class1
+# echo "crontab is"
+# crontab -l
+# delete_assignment class1 testAssignment1
+# list_assignments class1
+
+# delete_course class3
+# list_courses
+# list_assignments
+
+# update_assignment_date class1 hw2 01/07/17
+# list_assignments
+# list_assignments class1
+
+# echo "crontab after delete is"
+# crontab -l
 # list_courses
 # list_assignments
 # delete_course testing
