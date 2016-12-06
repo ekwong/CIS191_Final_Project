@@ -5,7 +5,7 @@ We created a coursework/organization system that will increase productivity when
 
 ## Components:
 
-- To do list: It has reminders for course related tasks - HWs, exams, presentations. This will allow for increased efficiency when working since reminders are linked directly to folders so all the work ‘to do’ will be available to you from one place.
+- Reminders for course related assignments - HWs, exams, presentations. This will allow for increased efficiency when working since reminders are linked directly to folders so all the work ‘to do’ will be available to you from one place.
 
 - Add a course to your semester
 
