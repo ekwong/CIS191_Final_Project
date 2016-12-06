@@ -5,7 +5,7 @@ We created a coursework/organization system that will increase productivity when
 
 ## Components:
 
-- To do list: It has reminders for course related tasks - HWs, exams, presentations. This will allow for increased efficiency when working since reminders are linked directly to folders so all the work ‘to do’ will be available to you from one place.
+- Reminders for course related assignments - HWs, exams, presentations. This will allow for increased efficiency when working since reminders are linked directly to folders so all the work ‘to do’ will be available to you from one place.
 
 - Add a course to your semester
 
@@ -22,7 +22,7 @@ We created a coursework/organization system that will increase productivity when
 - List all your courses
 
   ```
-  cis191-final-project list-courses
+  cis191-final-project list-classes
   ```
 
 - Create assignment for a class (Note assignments can only be created in semester folder)
@@ -36,6 +36,12 @@ We created a coursework/organization system that will increase productivity when
   cis191-final-project create-assignment -c cis191 -a hw8 -d 12/16/16
   ```
   
+- Delete assignment for a class
+
+  ```
+  cis191-final-project delete-assignment -c cis191 -a hw8
+  ```
+  
 - Add TA/Instructors email address
   ```
   cis191-final-project add-email -c cis191 -e ta@course.com
@@ -43,7 +49,7 @@ We created a coursework/organization system that will increase productivity when
   
  - Submit an assignment
   ```
-  cis191-final-project submit -c cis191 -a 
+  cis191-final-project submit -c cis191 -a hw8
   ```
   
 - List assignments (Leave out the -c parameter for all assignments accross all classes)
