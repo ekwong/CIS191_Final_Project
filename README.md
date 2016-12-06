@@ -10,13 +10,13 @@ We created a coursework/organization system that will increase productivity when
 - Add a course to your semester
 
   ```
-  cis191-final-project create-class cis191
+  cis191-final-project create-class -c cis191
   ```
 
 - Remove a course
 
   ```
-  cis191-final-project delete-class cis191
+  cis191-final-project delete-class -c cis191
   ```
 
 - List all your courses
@@ -28,8 +28,29 @@ We created a coursework/organization system that will increase productivity when
 - Create assignment for a class
 
   ```
-  cis191-final-project create-assignment cis191 hw8 12/16/16
+  cis191-final-project create-assignment -c cis191 -a hw8 -d 12/16/16
   ```
+  
+- Update assignment for a class
+
+  ```
+  cis191-final-project create-assignment -c cis191 -a hw8 -d 12/16/16
+  ```
+  
+- Add TA/Instructors email address
+  ```
+  cis191-final-project add-email -c cis191 -e ta@course.com
+  ```
+  
+ - Submit an assignment
+  ```
+  cis191-final-project submit -c cis191 -a 
+  ```
+  
+ - List assignments (Leave out the -c parameter for all assignments accross all classes)
+```
+cis191-final-project list-assignments -c cis191 
+```
 
 - Organization commands: Nowadays, all coursework is available online to download to one's local machine however what ends up happening with these downloaded files is that they stay in the downloads folder - cluttering it up with files from different courses. An organizer will allow for a single command to move all homework files to their respective homework folder in their course folder and sort files by class as well as relation to class e.g. homework/notes/coursework. 
 
