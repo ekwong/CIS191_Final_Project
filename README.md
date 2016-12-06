@@ -26,7 +26,7 @@ We created a coursework/organization system that will increase productivity when
   ```
 
 - Create assignment for a class
-
+  Note assignments can only be created in semester folder
   ```
   cis191-final-project create-assignment -c cis191 -a hw8 -d 12/16/16
   ```
@@ -47,10 +47,10 @@ We created a coursework/organization system that will increase productivity when
   cis191-final-project submit -c cis191 -a 
   ```
   
- - List assignments (Leave out the -c parameter for all assignments accross all classes)
-```
-cis191-final-project list-assignments -c cis191 
-```
+- List assignments (Leave out the -c parameter for all assignments accross all classes)
+  ```
+  cis191-final-project list-assignments -c cis191 
+  ```
 
 - Organization commands: Nowadays, all coursework is available online to download to one's local machine however what ends up happening with these downloaded files is that they stay in the downloads folder - cluttering it up with files from different courses. An organizer will allow for a single command to move all homework files to their respective homework folder in their course folder and sort files by class as well as relation to class e.g. homework/notes/coursework. 
 
