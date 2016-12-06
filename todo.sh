@@ -36,6 +36,7 @@ create_course()
 	else
 		echo "$1" >> "$HOME_DIR/.courses"
 		mkdir "$HOME_DIR/$1"
+		touch "$HOME_DIR/$1/.init"
 		mkdir "$HOME_DIR/$1/assignments"
 		touch "$HOME_DIR/$1/assignments/.assignments_info"
 		mkdir "$HOME_DIR/$1/notes"
@@ -54,7 +55,7 @@ delete_course()
 }
 
 # create assignment
-# first arg is course name
+# arg 1 is course name
 # arg 2 is assignment name
 # arg 3 is assignment due date
 # creates a directory as assignment name and adds assignment name to .assignments_info
