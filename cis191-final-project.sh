@@ -13,6 +13,10 @@ case $1 in
             exit
         fi;
 
+        mkdir "$semester"
+        cd "$semester"
+        touch ".main"
+
         echo "init semester command"
         exit;
     ;;    
@@ -40,8 +44,8 @@ case $1 in
         shift
         while getopts ":c:e:" opt; do
            case $opt in
-           	c )  class=$OPTARG ;;
-           	e )  email=$OPTARG ;;
+            c )  class=$OPTARG ;;
+            e )  email=$OPTARG ;;
            esac
         done
     
@@ -55,10 +59,10 @@ case $1 in
            a )  assignment=$OPTARG ;;
            c )  class=$OPTARG ;;
            f )  if [[ (-z "$assignment") ]] ; then
-		            echo "files must be specified last"
-		            exit
-		        fi;
-		        files="list"
+                echo "files must be specified last"
+                exit
+            fi;
+            files="list"
            esac
         done
 
@@ -69,7 +73,75 @@ case $1 in
 
         bash ../email-submission.sh submit -c "$class" -a "$assignment"
         ;; 
-
+     create-class ) 
+            shift
+            while getopts ":c:" opt; do
+               case $opt in
+               c )  class=$OPTARG ;;
+               esac
+            done
+            #check if course exists
+            todo.sh create_course "$class";;
+        delete-class ) 
+            shift
+            while getopts ":c:" opt; do
+               case $opt in
+               c )  class=$OPTARG ;;
+               esac
+            done
+            #check if course exists
+            todo.sh delete_course "$class";;
+        create-assignment )
+            shift
+            while getopts ":a:c:d:" opt; do
+               case $opt in
+                c )  class=$OPTARG ;;
+                a )  assignment=$OPTARG ;;
+                d )  due=$OPTARG ;;
+               esac
+            done
+            todo.sh create_assignment "$class" "$assignment" "$due";;
+            #check if folder exists
+        update-assignment-due-date) 
+            shift
+            while getopts ":a:c:d:" opt; do
+               case $opt in
+                c )  class=$OPTARG ;;
+                a )  assignment=$OPTARG ;;
+                d )  due=$OPTARG ;;
+               esac
+            done
+            todo.sh update_assignment_date "$class" "$assignment" "$due";;
+        delete-assignment) 
+            shift
+            while getopts ":a:c:" opt; do
+               case $opt in
+                c )  class=$OPTARG ;;
+                a )  assignment=$OPTARG ;;
+               esac
+            done
+            todo.sh delete_assignment "$class" "$assignment" ;;
+        list-classes)
+            todo.sh list_courses;;
+        list-assignments)
+            todo.sh list_assignments  ;;
+        list-class-assignments)
+            shift
+            while getopts ":c:" opt; do
+               case $opt in
+                c )  class=$OPTARG ;;
+               esac
+            done
+            todo.sh list_assignments "$class"  ;;
+        list-files)
+            shift
+            while getopts ":c:a:" opt; do
+               case $opt in
+                c )  class=$OPTARG ;;
+                a ) assignment=$OPTARG;; 
+               esac
+            done
+            todo.sh list_assignments "$class"  ;;
     * ) echo "Unknown command";;
 esac
 

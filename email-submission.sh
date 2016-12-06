@@ -1,9 +1,13 @@
 #!/bin/sh
 
 case $1 in
+    #Adds an email address to the current class's store
     add-email )
 
         shift
+
+        #iterate through incoming arguments and 
+        #assign required variables based on flags
         while getopts ":c:e:" opt; do
            case $opt in
            c )  class=$OPTARG ;;
@@ -11,6 +15,7 @@ case $1 in
            esac
         done
         
+        #ensure command is being executed in a valid class 
         cd "$class"
         foundInitFile=false
         while [[ "$PWD" != "/" ]] ; do
@@ -72,23 +77,19 @@ case $1 in
         rm -f files.tar   
         tar -cf files.tar "../$assignment"
       
-        mutt -a files.tar -s "Test Email" -- < /dev/null  rahul.fakir@gmail.com 
-
+        mutt -a files.tar -s "Test Email" -- < /dev/null  "$emailAddress"
+        echo "Files have been submitted"
         rm -f files.tar
         ;;
+
     * ) echo "Unknown command";;
 esac
 shift
 
 
 
-shift $(($OPTIND - 1))
+#shift $(($OPTIND - 1))
 
 
 #echo "the remaining arguments are: $1 $2 $3"
 
-
-
-
-#-a add-email -e emailAddress -c className
-#-a submit -c cis191 -e emailAddress -f [files here]
