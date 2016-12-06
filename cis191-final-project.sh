@@ -1,4 +1,5 @@
 #!/bin/sh
+
 case $1 in
     init ) 
         shift
@@ -81,7 +82,9 @@ case $1 in
                esac
             done
             #check if course exists
-            todo.sh create_course "$class";;
+            
+            source ../todo.sh
+            create_course "$class";;
         delete-class ) 
             shift
             while getopts ":c:" opt; do
@@ -90,7 +93,8 @@ case $1 in
                esac
             done
             #check if course exists
-            todo.sh delete_course "$class";;
+            source ../todo.sh
+            delete_course "$class";;
         create-assignment )
             shift
             while getopts ":a:c:d:" opt; do
@@ -100,7 +104,8 @@ case $1 in
                 d )  due=$OPTARG ;;
                esac
             done
-            todo.sh create_assignment "$class" "$assignment" "$due";;
+            source ../todo.sh
+            create_assignment "$class" "$assignment" "$due";;
             #check if folder exists
         update-assignment-due-date) 
             shift
@@ -111,7 +116,8 @@ case $1 in
                 d )  due=$OPTARG ;;
                esac
             done
-            todo.sh update_assignment_date "$class" "$assignment" "$due";;
+            source ../todo.sh
+            update_assignment_date "$class" "$assignment" "$due";;
         delete-assignment) 
             shift
             while getopts ":a:c:" opt; do
@@ -122,9 +128,11 @@ case $1 in
             done
             todo.sh delete_assignment "$class" "$assignment" ;;
         list-classes)
-            todo.sh list_courses;;
+            source ../todo.sh
+            list_courses;;
         list-assignments)
-            todo.sh list_assignments  ;;
+            source ../todo.sh
+            list_assignments  ;;
         list-class-assignments)
             shift
             while getopts ":c:" opt; do
@@ -132,7 +140,8 @@ case $1 in
                 c )  class=$OPTARG ;;
                esac
             done
-            todo.sh list_assignments "$class"  ;;
+            source ../todo.sh
+            list_assignments "$class"  ;;
         list-files)
             shift
             while getopts ":c:a:" opt; do
@@ -141,7 +150,8 @@ case $1 in
                 a ) assignment=$OPTARG;; 
                esac
             done
-            todo.sh list_assignments "$class"  ;;
+            source ../todo.sh
+            list_files_for_assignment "$class" "$assignment"  ;;
     * ) echo "Unknown command";;
 esac
 

@@ -72,7 +72,7 @@ case $1 in
 
       
 
-        cd "Assignments" 
+        cd "assignments" 
         cd "$assignment"
         rm -f files.tar   
         tar -cf files.tar "../$assignment"

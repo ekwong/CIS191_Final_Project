@@ -31,16 +31,17 @@ add_cron()
 # creates .assignments_info file inside assignments
 create_course()
 {
-	if grep -q "$1" "$HOME_DIR/.courses"; then
-		echo "$1 already exists as a course"
+
+	if [ -d "$HOME_DIR/$1" ]; then
+			echo "$1 already exists as a course" 
 	else
-		echo "$1" >> "$HOME_DIR/.courses"
-		mkdir "$HOME_DIR/$1"
+		mkdir -p "$HOME_DIR/$1"
 		touch "$HOME_DIR/$1/.init"
-		mkdir "$HOME_DIR/$1/assignments"
-		touch "$HOME_DIR/$1/assignments/.assignments_info"
-		mkdir "$HOME_DIR/$1/notes"
-		mkdir "$HOME_DIR/$1/administration"
+		mkdir -p "$HOME_DIR/$1/assignments"
+		touch  "$HOME_DIR/$1/assignments/.assignments_info"
+		mkdir -p "$HOME_DIR/$1/notes"
+		mkdir -p "$HOME_DIR/$1/administration"
+		echo "$1" >> "$HOME_DIR/.courses"
 		echo "$1 has been added as a course"
 	fi
 }
@@ -155,6 +156,8 @@ initialize()
 	fi
 }
 initialize
+
+
 # create_course class1
 # create_course class2
 # create_assignment class2 hw1 12/16/16
