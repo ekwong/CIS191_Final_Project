@@ -98,6 +98,7 @@ update_assignment_date()
 }
 
 # delete assignment
+# NOTE: does not delete the physical files of the assignment
 # arg 1 is the course
 # arg 2 is the assignment
 delete_assignment()
