@@ -43,7 +43,6 @@ case $1 in
            case $opt in
            a )  assignment=$OPTARG ;;
            c )  class=$OPTARG ;;
-           f )  files="list"
            esac
         done
       
@@ -85,11 +84,3 @@ case $1 in
     * ) echo "Unknown command";;
 esac
 shift
-
-
-
-#shift $(($OPTIND - 1))
-
-
-#echo "the remaining arguments are: $1 $2 $3"
-
