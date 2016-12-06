@@ -1,9 +1,8 @@
 #!/bin/sh
-
+#parse first command and push to relevant case statement
 case $1 in
     #Adds an email address to the current class's store
     add-email )
-
         shift
 
         #iterate through incoming arguments and 
@@ -28,7 +27,9 @@ case $1 in
             cd ..
         done
 
+        #only continues if a valid semester folder is present
         if [[ "$foundInitFile" == "true" ]]; then
+            #update email address
             echo "emailAddress $email" > .init
         else
             echo "no class folder was found"
@@ -36,9 +37,12 @@ case $1 in
         fi
        
         echo "Email address has been updated";;
+    # submit your files for each different assignment
     submit )
-
         shift
+
+        #iterate through incoming arguments and 
+        #assign required variables based on flags
         while getopts ":a:c:" opt; do
            case $opt in
            a )  assignment=$OPTARG ;;
@@ -47,7 +51,7 @@ case $1 in
         done
       
         cd "$class"
-       
+        #ensure command is being executed in a valid class 
         foundInitFile=false
         while [[ "$PWD" != "/" ]] ; do
 
@@ -58,8 +62,9 @@ case $1 in
             fi
             cd ..
         done
-
+        #only continues if a valid semester folder is present
         if [[ "$foundInitFile" == "true" ]]; then
+            #get valid email address
             while read line; do
                emailAddress=${line:13}
           
@@ -70,14 +75,16 @@ case $1 in
         fi
 
       
-
+        #change directory to folder with files to submit
         cd "assignments" 
         cd "$assignment"
         rm -f files.tar   
+        # create tar file
         tar -cf files.tar "../$assignment"
-      
+        #send tar file
         echo "Please find my homework files attached!" | mutt -a files.tar -s "Homework files" -- < /dev/null  "$emailAddress"
         echo "Files have been submitted"
+        #remove tar file
         rm -f files.tar
         ;;
 

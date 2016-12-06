@@ -1,5 +1,6 @@
 #!/bin/sh
 
+#create a new semester folder
 case $1 in
     init ) 
         shift
@@ -23,6 +24,7 @@ case $1 in
     ;;    
 esac
 
+#when this code is run, check that you are in a directory or sub directory of a semester folder
 foundInitFile=false
 while [[ "$PWD" != "/" ]] ; do
 
@@ -39,8 +41,9 @@ if [[ "$foundInitFile" == "false" ]]; then
     exit
 fi
 
-
+#parse incoming commands
 case $1 in
+    #add an email address for a class
     add-email ) 
         shift
         while getopts ":c:e:" opt; do
@@ -53,6 +56,7 @@ case $1 in
         bash ../email-submission.sh add-email -c "$class" -e "$email"
         ;;        
 
+    #submit files for an assignment
     submit )
         shift
         while getopts ":a:c:" opt; do
@@ -67,6 +71,7 @@ case $1 in
            esac
         done
 
+        #ensure required input was supplied
         if [[ (-z "$assignment") ]] || [[ (-z "$class") ]] ; then
             echo "assignment and class are required to submit an assignment directory"
             exit
@@ -74,7 +79,9 @@ case $1 in
 
         bash ../email-submission.sh submit -c "$class" -a "$assignment"
         ;; 
-     create-class ) 
+
+    #create class folder 
+    create-class ) 
             shift
             while getopts ":c:" opt; do
                case $opt in
@@ -85,74 +92,89 @@ case $1 in
             
             source ../todo.sh
             create_course "$class";;
-        delete-class ) 
-            shift
-            while getopts ":c:" opt; do
-               case $opt in
-               c )  class=$OPTARG ;;
-               esac
-            done
-            #check if course exists
-            source ../todo.sh
-            delete_course "$class";;
-        create-assignment )
-            shift
-            while getopts ":a:c:d:" opt; do
-               case $opt in
-                c )  class=$OPTARG ;;
-                a )  assignment=$OPTARG ;;
-                d )  due=$OPTARG ;;
-               esac
-            done
-            source ../todo.sh
-            create_assignment "$class" "$assignment" "$due";;
-            #check if folder exists
-        update-assignment-due-date) 
-            shift
-            while getopts ":a:c:d:" opt; do
-               case $opt in
-                c )  class=$OPTARG ;;
-                a )  assignment=$OPTARG ;;
-                d )  due=$OPTARG ;;
-               esac
-            done
-            source ../todo.sh
-            update_assignment_date "$class" "$assignment" "$due";;
-        delete-assignment) 
-            shift
-            while getopts ":a:c:" opt; do
-               case $opt in
-                c )  class=$OPTARG ;;
-                a )  assignment=$OPTARG ;;
-               esac
-            done
-            source ../todo.sh
-            delete_assignment "$class" "$assignment" ;;
-        list-classes)
-            source ../todo.sh
-            list_courses;;
-        list-assignments)
-            source ../todo.sh
-            list_assignments  ;;
-        list-class-assignments)
-            shift
-            while getopts ":c:" opt; do
-               case $opt in
-                c )  class=$OPTARG ;;
-               esac
-            done
-            source ../todo.sh
-            list_assignments "$class"  ;;
-        list-files)
-            shift
-            while getopts ":c:a:" opt; do
-               case $opt in
-                c )  class=$OPTARG ;;
-                a ) assignment=$OPTARG;; 
-               esac
-            done
-            source ../todo.sh
-            list_files_for_assignment "$class" "$assignment"  ;;
+
+    #delete a class folder
+    delete-class ) 
+        shift
+        while getopts ":c:" opt; do
+           case $opt in
+           c )  class=$OPTARG ;;
+           esac
+        done
+        #check if course exists
+        source ../todo.sh
+        delete_course "$class";;
+
+    #create an assignment for a class
+    create-assignment )
+        shift
+        while getopts ":a:c:d:" opt; do
+           case $opt in
+            c )  class=$OPTARG ;;
+            a )  assignment=$OPTARG ;;
+            d )  due=$OPTARG ;;
+           esac
+        done
+        source ../todo.sh
+        create_assignment "$class" "$assignment" "$due";;
+    
+    #update an existing assignments due date
+    update-assignment-due-date) 
+        shift
+        while getopts ":a:c:d:" opt; do
+           case $opt in
+            c )  class=$OPTARG ;;
+            a )  assignment=$OPTARG ;;
+            d )  due=$OPTARG ;;
+           esac
+        done
+        source ../todo.sh
+        update_assignment_date "$class" "$assignment" "$due";;
+
+    #delete an existing assignment for a class
+    delete-assignment) 
+        shift
+        while getopts ":a:c:" opt; do
+           case $opt in
+            c )  class=$OPTARG ;;
+            a )  assignment=$OPTARG ;;
+           esac
+        done
+        source ../todo.sh
+        delete_assignment "$class" "$assignment" ;;
+
+    #list all the classes for the current semester
+    list-classes)
+        source ../todo.sh
+        list_courses;;
+
+    #list all assignments for the current semester
+    list-assignments)
+        source ../todo.sh
+        list_assignments  ;;
+    
+    #list all assignments for a specific class
+    list-class-assignments)
+        shift
+        while getopts ":c:" opt; do
+           case $opt in
+            c )  class=$OPTARG ;;
+           esac
+        done
+        source ../todo.sh
+        list_assignments "$class"  ;;
+
+    #List files for a specific assignment
+    list-files)
+        shift
+        while getopts ":c:a:" opt; do
+           case $opt in
+            c )  class=$OPTARG ;;
+            a ) assignment=$OPTARG;; 
+           esac
+        done
+        source ../todo.sh
+        list_files_for_assignment "$class" "$assignment"  ;;
     * ) echo "Unknown command";;
 esac
 
