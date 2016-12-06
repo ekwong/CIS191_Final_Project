@@ -22,7 +22,7 @@ add_cron()
 	hour=$(date +%H -d "$1"-1day)
 	min=$(date +%M -d "$1"-1day)
 
-	reminder="echo $2 is due on $1"
+	reminder="echo assignment $2 for course $3 is due on $1"
 
 	crontab -l > temp
 	echo "$min $hour $day $month * root $reminder" >> temp
@@ -69,7 +69,7 @@ create_assignment()
 		echo "$2	$due_date" >> "$HOME_DIR/$1/assignments.txt"
 		mkdir "$HOME_DIR/$1/$2"
 		echo "$2 (due on $3) has been added as an assignment in course $1"
-		add_cron $3 $2
+		add_cron $3 $2 $1
 	fi
 }
 
@@ -78,11 +78,11 @@ create_assignment()
 #arg 2 is the assignment
 delete_assignment()
 {
-	sed -i '' "/$2/d" "$HOME_DIR/$1/assignments.txt"
-	rm -r "$HOME_DIR/$1/$2"
+	sed -i "/$2/d" "$HOME_DIR/$1/assignments.txt"
 	echo "Assignment $2 has been removed from class $1's assignments"
 	crontab -l > temp
-	sed -i "/assignment $2 for course $1 is due/d" temp
+	string="assignment $2 for course $1 is due on"
+	sed -i "/$string/d" temp
 	crontab temp
 	rm temp
 }
@@ -127,7 +127,12 @@ initialize()
 }
 initialize
 create_course class1
-create_assignment class1 testAssignment 05/06/16
+create_assignment class1 testAssignment1 05/20/16
+echo "crontab is"
+crontab -l
+delete_assignment class1 testAssignment1
+echo "crontab after delete is"
+crontab -l
 # list_courses
 # list_assignments
 # delete_course testing
