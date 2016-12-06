@@ -76,10 +76,35 @@ create_assignment()
 	else
 		due_date=$(date -d "$3")
 		echo "$2	$due_date" >> "$HOME_DIR/$1/assignments/.assignments_info"
-		mkdir "$HOME_DIR/$1/$2"
+		mkdir "$HOME_DIR/$1/assignments/$2"
 		echo "$2 (due on $3) has been added as an assignment in course $1"
 		add_cron $3 $2 $1
 	fi
+}
+
+# NOTE: use this function for if the assignment already exists, and you just want to update the due date
+# this removes the old due date and inserts the new one
+# take in 3 args
+# arg 1 = course name
+# arg 2 = assignment name
+# arg 3 = desired due date
+update_assignment_date()
+{
+	# remove the assignment from .assignments_info
+	sed -i "/$2/d" "$HOME_DIR/$1/assignments/.assignments_info"
+	# add the assignment with updated date to .assignments_info
+	due_date=$(date -d "$3")
+	echo "$2	$due_date" >> "$HOME_DIR/$1/assignments/.assignments_info"
+
+	# get remove old due date from crontab reminder
+	crontab -l > temp
+	string="assignment $2 for course $1 is due on"
+	sed -i "/$string/d" temp
+	crontab temp
+	rm temp
+
+	# add new due date to crontab reminder
+	add_cron $2 $3 $1
 }
 
 # delete assignment
