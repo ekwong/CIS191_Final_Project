@@ -49,7 +49,7 @@ We created a coursework/organization system that will increase productivity when
   
  - Submit an assignment
   ```
-  cis191-final-project submit -c cis191 -a 
+  cis191-final-project submit -c cis191 -a hw8
   ```
   
 - List assignments (Leave out the -c parameter for all assignments accross all classes)
