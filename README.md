@@ -22,7 +22,7 @@ We created a coursework/organization system that will increase productivity when
 - List all your courses
 
   ```
-  cis191-final-project list-courses
+  cis191-final-project list-classes
   ```
 
 - Create assignment for a class (Note assignments can only be created in semester folder)
